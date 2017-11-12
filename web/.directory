@@ -1,0 +1,10 @@
+[Dolphin]
+GroupedSorting=true
+SortRole=type
+Timestamp=2017,9,4,16,10,8
+Version=4
+ViewMode=1
+VisibleRoles=Details_text,Details_modificationtime,Details_size,Details_type,CustomizedDetails
+
+[Settings]
+HiddenFilesShown=true

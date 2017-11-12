@@ -1,0 +1,33 @@
+{% extends 'frontend.html.twig' %}
+
+{% block title %}Entradas más recientes{% endblock %}
+
+{% block article %}
+    {% for entry in entries %}
+        <div class="blog-post">
+            <h2 class="blog-post-title">a{{ entry.title }}</h2>
+            <p class="blog-post-meta">
+                Creado el <strong>{{ entry.createAt | date("d-m-Y") }}</strong>
+                 por <a href="#">{{ entry.user.name ~ ' ' ~ entry.user.lastName }}</a>
+                 con la categoría <a href="">{{ entry.category.name }}</a>
+                <br>
+                Etiquetas:
+                {% for tag in entry.tags %}
+                    {% if not loop.last %}
+                        <a href="#">{{  tag.name }}</a>,
+                    {% else %}
+                        <a href="#">{{  tag.name }}</a>
+                    {% endif %}
+                {% endfor %}
+                - Comentarios: <strong>{{ entry.comments | length }}</strong>
+            </p>
+            {{ entry.content(150) | striptags }}...
+            <br>
+            <br>
+            <a class="btn btn-outline-primary" href="{{ path('entry_show_by_slug', { 'slug': entry.slug }) }}">Segir leyendo...</a>
+        </div>
+        {% if not loop.last %}
+            <hr>
+        {% endif %}
+    {% endfor %}
+{% endblock %}

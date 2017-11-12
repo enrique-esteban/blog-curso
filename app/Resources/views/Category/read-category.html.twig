@@ -1,0 +1,57 @@
+{% extends 'BlogBundle::layout.html.twig' %}
+
+{% block menu %}
+    {% include 'BlogBundle:Category:menuCategories.html.twig' with { 'categories': categories } %}
+{% endblock %}
+
+{% block content %}
+    <div class="col-lg-6">
+        <h2>Entradas de la categoría {{ category.name }}:</h2><br>
+
+        <table class="table table-bordered">
+            <tr>
+                <th>Imagen</th>
+                <th>Título</th>
+                <th>Dueño</th>
+                <th>Contenido</th>
+                <th>Estado</th>
+                <th>Etiquetas</th>
+                <th>Editar</th>
+                <th>Eliminar</th>
+            </tr>
+            {% for entry in category.entries  %}
+                <tr>
+                    <td>
+                        {% if entry.image %}
+                            <img width="20px" src="{{ asset('uploads/' ~ entry.image) }}">
+                        {% endif %}
+                    </td>
+                    <td>{{ entry.title }}</td>
+                    <td>{{ entry.user.name }}</td>
+                    <td>{{ entry.content }}</td>
+                    <td>{{ entry.status }}</td>
+                    <td>
+                        {% for et in entry.entryTag %}
+                            {% if loop.last %}
+                                {{ et.tag.name }}
+                            {% else %}
+                                {{ et.tag.name ~ ', '}}
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    {% if app.user.id is defined and app.user.id == entry.user.id %}
+                        <td><a href="{{ path('blog_edit_entry', { 'id': entry.id }) }}" class="btn btn-warning">Editar</a></td>
+                        <td>
+                            <a href="{{ path('blog_delete_entry', { 'id': entry.id }) }}" class="btn btn-danger">Eliminar</a>
+                        </td>
+                    {% else %}
+                        <td></td>
+                        <td></td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="clearfix"></div>
+{% endblock content %}

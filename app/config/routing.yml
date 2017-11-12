@@ -1,0 +1,29 @@
+blog:
+    resource: "@BlogBundle/Resources/config/routing.yml"
+    prefix:   /
+
+easy_admin_bundle:
+    resource: "@EasyAdminBundle/Controller/"
+    type:     annotation
+    prefix:   /admin
+
+blog_homepage:
+    path:     /
+    defaults: { _controller: BlogBundle:Default:Index }
+
+login:
+  path: /login
+  defaults: { _controller: BlogBundle:User:login }
+
+logout:
+  path: /logout
+
+entry_show_by_slug:
+  path: /entrada/{slug}
+  defaults: { _controller: BlogBundle:Entry:showEntryBySlug }
+
+entry_show_by_id:
+  path: /entrada/{id}
+  defaults: { _controller: BlogBundle:Entry:showEntryById }
+  requirements:
+    id: \d+

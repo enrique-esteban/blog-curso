@@ -1,0 +1,84 @@
+{% extends 'BlogBundle::layout.html.twig' %}
+
+{% block menu %}
+    {% include 'BlogBundle:Category:menuCategories.html.twig' with { 'categories': categories } %}
+{% endblock %}
+
+{% block content %}
+    <div class="col-lg-6">
+        <h2>Listado de Entradas:</h2><br>
+        {% for message in app.session.flashbag().get('status') %}
+            <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+        <hr>
+        {% if app.user.id is defined %}
+            <a href="{{ path('blog_add_entry') }}" class="btn btn-success">Añadir entrada</a>
+        {% endif %}
+        <hr>
+        <table class="table table-bordered">
+            <tr>
+                <th>Imagen</th>
+                <th>Título</th>
+                <th>Dueño</th>
+                <th>Contenido</th>
+                <th>Categoría</th>
+                <th>Estado</th>
+                <th>Etiquetas</th>
+                <th>Editar</th>
+                <th>Eliminar</th>
+            </tr>
+            {% for entry in entries  %}
+                <tr>
+                    <td>
+                        {% if entry.image %}
+                            <img width="20px" src="{{ asset('uploads/' ~ entry.image) }}">
+                        {% endif %}
+                    </td>
+                    <td>{{ entry.title }}</td>
+                    <td>{{ entry.user.name }}</td>
+                    <td>{{ entry.content }}</td>
+                    <td>{{ entry.category }}</td>
+                    <td>{{ entry.status }}</td>
+                    <td>
+                        {% for et in entry.entryTag %}
+                            {% if loop.last %}
+                                {{ et.tag.name }}
+                            {% else %}
+                                {{ et.tag.name ~ ', '}}
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    {% if app.user.id is defined and app.user.id == entry.user.id %}
+                        <td><a href="{{ path('blog_edit_entry', { 'id': entry.id }) }}" class="btn btn-warning">Editar</a></td>
+                        <td>
+                            <a href="{{ path('blog_delete_entry', { 'id': entry.id }) }}" class="btn btn-danger">Eliminar</a>
+                        </td>
+                    {% else %}
+                        <td></td>
+                        <td></td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="clearfix"></div>
+
+    {% if paginator.show %}
+        <ul class="pagination">
+            {% if paginator.currentPage != 1 %}
+                <li><a href="{{ path('blog_index_entry', {'page': paginator.currentPage - 1}) }}">&laquo;</a></li>
+            {% endif %}
+            {% for i in 1..paginator.pageCount %}
+                {% if paginator.currentPage %}
+                    <li><a href="{{ path('blog_index_entry', {'page': i}) }}">{{ i }}</a></li>
+                {% else %}
+                    <li><a href="{{ path('blog_index_entry', {'page': i}) }}">{{ i }}</a></li>
+                {% endif %}
+            {% endfor %}
+            {% if paginator.currentPage != paginator.pageCount %}
+                <li><a href="{{ path('blog_index_entry', {'page': paginator.currentPage + 1}) }}">&raquo;</a></li>
+            {% endif %}
+        </ul>
+    {% endif %}
+{% endblock content %}

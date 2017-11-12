@@ -1,0 +1,35 @@
+{% extends 'frontend.html.twig' %}
+
+{% block title %}{{ entry.title }}{% endblock %}
+
+{% block post %}
+    <div class="blog-post">
+        <h2 class="blog-post-title">{{ entry.title }}</h2>
+        <p class="blog-post-meta">
+            Creado el <strong>{{ entry.createAt | date("d-m-Y") }}</strong> por <a href="#">{{ entry.user.name ~ ' ' ~ entry.user.lastName }}</a> con la categoría <a href="">{{ entry.category.name }}</a><br>
+            Etiquetas:
+            {% for tag in entry.tags %}
+                {% if not loop.last %}
+                    <a href="#">{{  tag.name }}</a>,
+                {% else %}
+                    <a href="#">{{  tag.name }}</a>
+                {% endif %}
+            {% endfor %}
+            - Comentarios: <strong>{{ entry.comments | length }}</strong>
+        </p>
+        {{ entry.content|raw }}
+        <hr>
+        <h3>Comentarios:</h3>
+        {% for comment in entry.comments %}
+            <ul class="list-unstyled">
+                <li class="media">
+                    <img class="mr-3" src="{{ asset('profile/' ~ entry.user.image ) }}" alt="Imagen ususario {{ entry.user.username }}">
+                    <div class="media-body">
+                        <h5 class="mt-0 mb-1">{{ comment.user.username }} dijo:</h5>
+                        {{ comment.content }}
+                    </div>
+                </li>
+            </ul>
+        {% endfor %}
+    </div><!-- /.blog-post -->
+{% endblock %}
